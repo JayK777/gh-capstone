@@ -1,0 +1,9 @@
+---
+applyTo: "docs/requirements.md"
+---
+# Requirements Document Rules
+- Always include a User Story section with the original verbatim text.
+- Functional Requirements use IDs: FR-01, FR-02 …
+- Non-Functional Requirements use IDs: NFR-01, NFR-02 …
+- Acceptance Criteria use Given/When/Then format with IDs: AC-01, AC-02 …
+- Never delete existing requirements; mark superseded ones with ~~strikethrough~~.

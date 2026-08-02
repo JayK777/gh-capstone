@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Post-commit hook: updates CHANGELOG.md with a timestamped entry for the last commit."""
+
+import subprocess
+import sys
+from datetime import date
+from pathlib import Path
+
+
+def get_last_commit_info() -> tuple[str, str, str]:
+    def git(*args: str) -> str:
+        return subprocess.check_output(["git"] + list(args), text=True).strip()
+
+    sha = git("log", "-1", "--format=%h")
+    msg = git("log", "-1", "--format=%s")
+    author = git("log", "-1", "--format=%an")
+    return sha, msg, author
+
+
+def update_changelog(sha: str, msg: str, author: str) -> None:
+    changelog = Path("CHANGELOG.md")
+    today = date.today().isoformat()
+    entry = f"- [{sha}] ({today}) **{author}**: {msg}\n"
+
+    if not changelog.exists():
+        changelog.write_text("# Changelog\n\n## Unreleased\n\n")
+
+    content = changelog.read_text()
+    if "## Unreleased" not in content:
+        content = content + "\n## Unreleased\n\n"
+
+    # Insert entry after "## Unreleased" header
+    content = content.replace("## Unreleased\n\n", f"## Unreleased\n\n{entry}")
+    changelog.write_text(content)
+    print(f"📝 CHANGELOG updated: {entry.strip()}")
+
+
+def main() -> int:
+    try:
+        sha, msg, author = get_last_commit_info()
+        update_changelog(sha, msg, author)
+    except subprocess.CalledProcessError as exc:
+        print(f"⚠️  Post-commit hook warning: {exc}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

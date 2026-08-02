@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install dependencies",
+      "type": "shell",
+      "command": "pip install -r requirements.txt",
+      "group": "build",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": "pytest tests/ -v --cov=src --cov-report=term-missing",
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Install git hooks",
+      "type": "shell",
+      "command": "python hooks/install-hooks.py",
+      "group": "build"
+    },
+    {
+      "label": "Run pipeline (dry-run)",
+      "type": "shell",
+      "command": "python run_pipeline.py --story ${input:storyId} --dry-run",
+      "group": "build",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Run pipeline",
+      "type": "shell",
+      "command": "python run_pipeline.py --story ${input:storyId}",
+      "group": "build",
+      "presentation": { "reveal": "always" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "storyId",
+      "description": "JIRA Story ID (e.g. DOCS-42)",
+      "default": "DOCS-42",
+      "type": "promptString"
+    }
+  ]
+}
