@@ -39,21 +39,25 @@ class GitHubClient:
 
     # ── branch ───────────────────────────────────────────────────────────────
 
-    def get_default_branch_sha(self) -> str:
-        """Return the HEAD SHA of the repository's default branch."""
+    def get_default_branch(self) -> tuple[str, str]:
+        """Return (branch_name, HEAD SHA) for the repository's default branch."""
         data = self._get(f"/repos/{self._owner}/{self._repo}")
         default_branch = data["default_branch"]
         ref_data = self._get(f"/repos/{self._owner}/{self._repo}/git/ref/heads/{default_branch}")
-        return ref_data["object"]["sha"]
+        return default_branch, ref_data["object"]["sha"]
 
     def create_branch(self, branch_name: str, from_sha: str) -> str:
-        """Create a new branch and return its name."""
+        """Create a new branch and return its name (no-op if it already exists)."""
         if not branch_name or not from_sha:
             raise ValueError("branch_name and from_sha are required.")
-        self._post(
-            f"/repos/{self._owner}/{self._repo}/git/refs",
-            {"ref": f"refs/heads/{branch_name}", "sha": from_sha},
-        )
+        try:
+            self._post(
+                f"/repos/{self._owner}/{self._repo}/git/refs",
+                {"ref": f"refs/heads/{branch_name}", "sha": from_sha},
+            )
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code != 422:
+                raise
         return branch_name
 
     # ── file push ─────────────────────────────────────────────────────────────
