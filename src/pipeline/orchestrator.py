@@ -141,7 +141,7 @@ class SDLCOrchestrator:
             self.story = self._jira.get_story(self.config.jira_story_id)
 
         branch_name = step8_pr.make_branch_name(self.config.jira_story_id, self.story.title)
-        base_sha = self._github.get_default_branch_sha()
+        base_branch, base_sha = self._github.get_default_branch()
         self._github.create_branch(branch_name, base_sha)
 
         files_to_push = step8_pr.collect_files(self.config.docs_root, self.config.src_root)
@@ -163,6 +163,6 @@ class SDLCOrchestrator:
             title=pr_title,
             body=pr_body,
             head_branch=branch_name,
-            base_branch=self.config.base_branch,
+            base_branch=base_branch,
         )
         self.pr_url = pr.url
