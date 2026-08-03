@@ -1,0 +1,15 @@
+# API Documentation Index
+
+- [src.pipeline.doc_generator](api/src_pipeline_doc_generator.md)
+- [src.pipeline.github_client](api/src_pipeline_github_client.md)
+- [src.pipeline.jira_client](api/src_pipeline_jira_client.md)
+- [src.pipeline.orchestrator](api/src_pipeline_orchestrator.md)
+- [src.pipeline.utils](api/src_pipeline_utils.md)
+- [src.steps.step1_requirements](api/src_steps_step1_requirements.md)
+- [src.steps.step2_architecture](api/src_steps_step2_architecture.md)
+- [src.steps.step3_design_review](api/src_steps_step3_design_review.md)
+- [src.steps.step4_impl_plan](api/src_steps_step4_impl_plan.md)
+- [src.steps.step5_implementation](api/src_steps_step5_implementation.md)
+- [src.steps.step6_review](api/src_steps_step6_review.md)
+- [src.steps.step7_verify](api/src_steps_step7_verify.md)
+- [src.steps.step8_pr](api/src_steps_step8_pr.md)
